@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">США</string>
+    <string name="app_name">hotels</string>
     <string name="sort_title">Сортировка</string>
     <string name="alert_default_description">Произошла ошибка, попробуйте позже.</string>
     <string name="alert_default_title">Ошибка</string>

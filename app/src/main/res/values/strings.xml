@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CleverPampkinAntonov</string>
+    <string name="app_name">hotels</string>
     <string name="sort_title">Сортировка</string>
     <string name="alert_default_description">Произошла ошибка, попробуйте позже.</string>
     <string name="alert_default_title">Ошибка</string>
