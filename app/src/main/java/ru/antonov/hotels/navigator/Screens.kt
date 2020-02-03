@@ -7,20 +7,20 @@ import ru.antonov.hotels.screens.hotel.HotelFragment
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 class Screens {
-    class HomeScreen: SupportAppScreen() {
+    class HomeScreen : SupportAppScreen() {
         override fun getFragment(): Fragment {
             return HomeFragment()
         }
     }
 
-    class HotelScreen(val hotelId: Long): SupportAppScreen() {
+    class HotelScreen(val hotelId: Long) : SupportAppScreen() {
         override fun getFragment(): Fragment {
             val bundle = Bundle().apply {
                 putLong(HotelFragment.HOTEL_ID, hotelId)
             }
 
             return HotelFragment().apply {
-               arguments = bundle
+                arguments = bundle
             }
         }
     }

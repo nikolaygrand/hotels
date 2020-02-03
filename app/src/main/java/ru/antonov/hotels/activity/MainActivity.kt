@@ -33,6 +33,7 @@ class MainActivity: MvpActivity<MainView, MainPresenter>(), MainView {
         MapKitFactory.initialize(this)
 
         setContentView(R.layout.activity_main)
+        presenter.onCreate(savedInstanceState)
     }
 
     override fun onResume() {

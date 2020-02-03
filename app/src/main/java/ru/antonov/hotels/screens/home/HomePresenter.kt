@@ -7,19 +7,18 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import ru.antonov.hotels.application.HotelApplication
 import ru.antonov.hotels.data.HotelModel
+import ru.antonov.hotels.mvp.BasePresenter
 import ru.antonov.hotels.navigator.Screens
 import ru.antonov.hotels.repository.HotelsRepository
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
-class HomePresenter : MvpPresenter<HomeView> {
+class HomePresenter : BasePresenter<HomeView>() {
     @Inject
     lateinit var router: Router
 
     @Inject
     lateinit var repository: HotelsRepository
-
-    val disposable: CompositeDisposable = CompositeDisposable()
 
     init {
         HotelApplication.appComponent.inject(this)
@@ -30,6 +29,7 @@ class HomePresenter : MvpPresenter<HomeView> {
     }
 
     override fun attachView(view: HomeView) {
+        super.attachView(view)
         disposable += repository.getHotelsList()
             .doOnSubscribe {
                 arrayListOf<HotelModel>()
@@ -41,7 +41,8 @@ class HomePresenter : MvpPresenter<HomeView> {
                     view.loadHotels(hotels)
                 },
                 { error: Throwable? ->
-                    view.error(error) })
+                    view.error(error)
+                })
 
         disposable += view.hotelClick()
             .observeOn(AndroidSchedulers.mainThread())
@@ -72,11 +73,11 @@ class HomePresenter : MvpPresenter<HomeView> {
         when (model.field) {
             SortFieldsEnum.DISTANCE -> {
                 sortedArray.addAll(model.data.apply {
-                   if (model.direction == SortEnum.ASC) {
-                      sortBy { hotelModel -> hotelModel.distance }
-                   } else {
-                       sortByDescending { hotelModel -> hotelModel.distance}
-                   }
+                    if (model.direction == SortEnum.ASC) {
+                        sortBy { hotelModel -> hotelModel.distance }
+                    } else {
+                        sortByDescending { hotelModel -> hotelModel.distance }
+                    }
                 })
             }
 
@@ -85,12 +86,13 @@ class HomePresenter : MvpPresenter<HomeView> {
                     if (model.direction == SortEnum.ASC) {
                         sortBy { hotelModel -> hotelModel.countFreeRooms() }
                     } else {
-                        sortByDescending { hotelModel -> hotelModel.countFreeRooms()}
+                        sortByDescending { hotelModel -> hotelModel.countFreeRooms() }
                     }
                 })
             }
 
-            else -> {}
+            else -> {
+            }
         }
 
         return sortedArray

@@ -23,7 +23,7 @@ import ru.antonov.hotels.BuildConfig
 import ru.antonov.hotels.R
 import ru.antonov.hotels.data.HotelDetailsModel
 
-class HotelFragment: MvpFragment<HotelView, HotelPresenter>(), HotelView {
+class HotelFragment : MvpFragment<HotelView, HotelPresenter>(), HotelView {
     private val subjectHotel = PublishSubject.create<Long>()
     private val subjectBack = PublishSubject.create<Unit>()
     private var hotelId: Long = 0
@@ -58,12 +58,12 @@ class HotelFragment: MvpFragment<HotelView, HotelPresenter>(), HotelView {
 
     override fun loadHotel(hotel: HotelDetailsModel) {
 
-        tvTitle.text         = hotel.name
-        tvAddress.text       = hotel.address
-        tvAddress.text       = hotel.address
-        rbHotel.rating       = hotel.stars!!
+        tvTitle.text = hotel.name
+        tvAddress.text = hotel.address
+        tvAddress.text = hotel.address
+        rbHotel.rating = hotel.stars!!
         tvDistanceValue.text = hotel.distance.toString()
-        tvRoomsValue.text    = hotel.parseSuitesAvailability()
+        tvRoomsValue.text = hotel.parseSuitesAvailability()
 
         /*
         initPointMap(hotel)
@@ -71,14 +71,15 @@ class HotelFragment: MvpFragment<HotelView, HotelPresenter>(), HotelView {
         */
 
         val imagePath = "${BuildConfig.IMAGE_URL}${hotel.image}"
-        val listener = object: RequestListener<Drawable> {
+        val listener = object : RequestListener<Drawable> {
             override fun onLoadFailed(
                 e: GlideException?,
                 model: Any?,
                 target: Target<Drawable>?,
                 isFirstResource: Boolean
             ): Boolean {
-                error("Ошибка при загрузке изображения")
+                error(Throwable("Ошибка при загрузке изображения"))
+                return false
             }
 
             override fun onResourceReady(
@@ -134,7 +135,7 @@ class HotelFragment: MvpFragment<HotelView, HotelPresenter>(), HotelView {
         }
     }
 
-    override fun back()         = subjectBack
+    override fun back() = subjectBack
     override fun getHotelInfo() = subjectHotel
 
 

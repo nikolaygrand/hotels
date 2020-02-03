@@ -1,6 +1,7 @@
 package ru.antonov.hotels.screens.home
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,29 +15,39 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.home_fragment.*
 import ru.antonov.hotels.R
 import ru.antonov.hotels.data.HotelModel
+import ru.antonov.hotels.mvp.BaseFragment
 import ru.antonov.hotels.utils.view.VerticalSpaceItemDecoration
 
 
-class HomeFragment: MvpFragment<HomeView, HomePresenter>(), HomeView {
+class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
     private lateinit var hotelsAdapter: HotelsAdapter
-    private var sortFieldPosition     : SortFieldsEnum = SortFieldsEnum.NONE
-    private var sortDirection         : SortEnum = SortEnum.NONE
-    private var subjectSort           : PublishSubject<SortModel> = PublishSubject.create<SortModel>()
-
-    override fun createPresenter() = HomePresenter()
+    private var sortFieldPosition: SortFieldsEnum = SortFieldsEnum.NONE
+    private var sortDirection: SortEnum = SortEnum.NONE
+    private var subjectSort: PublishSubject<SortModel> = PublishSubject.create<SortModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
 
         if (savedInstanceState != null) {
-            sortFieldPosition = SortFieldsEnum.getByValue(savedInstanceState.getInt(SORT_FIELD, SortFieldsEnum.NONE.ordinal))!!
-            sortDirection     = SortEnum.getByValue(savedInstanceState.getInt(SORT_DIRECTION, SortEnum.NONE.ordinal))!!
+            sortFieldPosition = SortFieldsEnum.getByValue(
+                savedInstanceState.getInt(
+                    SORT_FIELD,
+                    SortFieldsEnum.NONE.ordinal
+                )
+            )!!
+            sortDirection = SortEnum.getByValue(
+                savedInstanceState.getInt(
+                    SORT_DIRECTION,
+                    SortEnum.NONE.ordinal
+                )
+            )!!
         }
 
         hotelsAdapter = HotelsAdapter()
     }
 
+    @SuppressLint("InflateParams")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,7 +71,8 @@ class HomeFragment: MvpFragment<HomeView, HomePresenter>(), HomeView {
                 id: Long
             ) {
                 btnSortAsc.isEnabled = position > 0
-                sortFieldPosition    = SortFieldsEnum.getByValue(position)!!
+                sortFieldPosition = SortFieldsEnum.getByValue(position)!!
+                makeSortHotels()
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
@@ -68,8 +80,8 @@ class HomeFragment: MvpFragment<HomeView, HomePresenter>(), HomeView {
         }
 
         btnSortAsc.setOnClickListener { btn ->
-            sortDirection = when(sortDirection) {
-                SortEnum.ASC  -> {
+            sortDirection = when (sortDirection) {
+                SortEnum.ASC -> {
                     SortEnum.DESC
                 }
                 SortEnum.DESC -> {
@@ -79,22 +91,26 @@ class HomeFragment: MvpFragment<HomeView, HomePresenter>(), HomeView {
             }
 
             when (sortDirection) {
-                SortEnum.ASC  -> btn.rotation = 0f
+                SortEnum.ASC -> btn.rotation = 0f
                 SortEnum.DESC -> btn.rotation = 180f
-                else          -> btn.rotation = 0f
+                else -> btn.rotation = 0f
             }
 
-            subjectSort.onNext(SortModel(sortFieldPosition, sortDirection, hotelsAdapter.getDataset()))
+            makeSortHotels()
         }
 
         rvHotels.addItemDecoration(VerticalSpaceItemDecoration(20))
 
         rvHotels.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            adapter       = hotelsAdapter
+            adapter = hotelsAdapter
         }
 
 
+    }
+
+    private fun makeSortHotels() {
+        subjectSort.onNext(SortModel(sortFieldPosition, sortDirection, hotelsAdapter.getDataset()))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -129,10 +145,10 @@ class HomeFragment: MvpFragment<HomeView, HomePresenter>(), HomeView {
                     ) { dialogInterface, _ -> dialogInterface.dismiss() }
                     .create()
 
-                    dialog.apply {
-                        setCanceledOnTouchOutside(false)
-                        show()
-                    }
+                dialog.apply {
+                    setCanceledOnTouchOutside(false)
+                    show()
+                }
             }
         }
     }
@@ -142,7 +158,9 @@ class HomeFragment: MvpFragment<HomeView, HomePresenter>(), HomeView {
 
     companion object {
         val TAG = HomeFragment::class.java.simpleName
-        const val SORT_FIELD     = "SORT_FIELD"
+        const val SORT_FIELD = "SORT_FIELD"
         const val SORT_DIRECTION = "SORT_DIRECTION"
     }
+
+    override fun createPresenter() = HomePresenter()
 }
