@@ -11,7 +11,7 @@ import ru.antonov.hotels.screens.hotel.HotelPresenter
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, NetworkModule::class, NavigationModule::class, RepositoryModule::class])
+@Component(modules = [AppModule::class, NetworkModule::class, NavigationModule::class, RepositoryModule::class, CacheModule::class])
 interface AppComponent {
     fun inject(activity: MainActivity)
     fun inject(application: HotelApplication)

@@ -1,10 +1,15 @@
 package ru.antonov.hotels.data
 
 import com.google.gson.annotations.SerializedName
+import io.objectbox.annotation.Entity
+import io.objectbox.annotation.Id
 
-open class HotelModel(
+@Entity
+data class HotelModel(
+    @Id
+    var id: Long = 0,
     @SerializedName("id")
-    var id                 : Long = 0,
+    var hotelId           : Long = 0,
     @SerializedName("name")
     var name               : String? = null,
     @SerializedName("address")
