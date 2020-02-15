@@ -21,10 +21,13 @@ class HotelApi constructor(context: Context) {
         val httpClient = OkHttpClient().newBuilder()
             .addInterceptor(logInterceptor)
             .addInterceptor(interceptor)
-            .connectionSpecs(listOf(
-                ConnectionSpec.MODERN_TLS,
-                ConnectionSpec.COMPATIBLE_TLS,
-                ConnectionSpec.CLEARTEXT))
+            .connectionSpecs(
+                listOf(
+                    ConnectionSpec.MODERN_TLS,
+                    ConnectionSpec.COMPATIBLE_TLS,
+                    ConnectionSpec.CLEARTEXT
+                )
+            )
             .build()
 
         val retrofit = Retrofit.Builder()

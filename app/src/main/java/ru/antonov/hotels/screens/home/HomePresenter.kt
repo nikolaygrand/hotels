@@ -20,16 +20,14 @@ class HomePresenter : BasePresenter<HomeView>() {
     @Inject
     lateinit var repository: HotelsRepository
 
-    init {
-        HotelApplication.appComponent.inject(this)
-    }
-
     override fun destroy() {
         disposable.dispose()
     }
 
     override fun attachView(view: HomeView) {
+        HotelApplication.appComponent.inject(this)
         super.attachView(view)
+
         disposable += repository.getHotelsList()
             .doOnSubscribe {
                 arrayListOf<HotelModel>()

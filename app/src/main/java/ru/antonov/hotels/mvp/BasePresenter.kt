@@ -4,7 +4,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpPresenter
 import com.hannesdorfmann.mosby3.mvp.MvpView
 import io.reactivex.disposables.CompositeDisposable
 
-open class BasePresenter<V : MvpView> : MvpPresenter<V> {
+abstract class BasePresenter<V : MvpView> : MvpPresenter<V> {
     protected val disposable = CompositeDisposable()
 
     override fun destroy() {
@@ -16,7 +16,6 @@ open class BasePresenter<V : MvpView> : MvpPresenter<V> {
     }
 
     override fun detachView(retainInstance: Boolean) {
-
     }
 
     override fun attachView(view: V) {

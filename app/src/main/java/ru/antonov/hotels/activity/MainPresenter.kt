@@ -37,9 +37,7 @@ class MainPresenter : BasePresenter<MainView>() {
 
     fun onCreate(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            router.newRootScreen(Screens.HomeScreen())
-        } else {
-
+            router.newRootScreen(Screens.AuthScreen())
         }
     }
 }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "449615511511",
+    "firebase_url": "https://hotels-641b4.firebaseio.com",
+    "project_id": "hotels-641b4",
+    "storage_bucket": "hotels-641b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449615511511:android:1eb1b4d43a6cd8a0375592",
+        "android_client_info": {
+          "package_name": "ru.antonov.hotels"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449615511511-ja0c66cvm979u6qig054oigavh1o5nnv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.antonov.hotels",
+            "certificate_hash": "dd6caca0f4489a0ec76a1ed9cb04d0846e84e0d7"
+          }
+        },
+        {
+          "client_id": "449615511511-e6l4om08ra1t7o8j4eq9ed43olg90qon.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Bk0ELH2xe9aGZsQ85J1Felc4u4ZBQFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449615511511-e6l4om08ra1t7o8j4eq9ed43olg90qon.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
