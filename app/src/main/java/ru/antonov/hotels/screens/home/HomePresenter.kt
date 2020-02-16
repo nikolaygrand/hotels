@@ -1,8 +1,6 @@
 package ru.antonov.hotels.screens.home
 
-import com.hannesdorfmann.mosby3.mvp.MvpPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import ru.antonov.hotels.application.HotelApplication
@@ -45,7 +43,7 @@ class HomePresenter : BasePresenter<HomeView>() {
         disposable += view.hotelClick()
             .observeOn(AndroidSchedulers.mainThread())
             .map {
-                router.navigateTo(Screens.HotelScreen(it.id))
+                router.navigateTo(Screens.HotelScreen(it.hotelId))
             }
             .subscribe()
 

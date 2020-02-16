@@ -7,7 +7,7 @@ import io.objectbox.annotation.Id
 @Entity
 data class HotelDetailsModel(
     @Id
-    var id: Long = 0,
+    var uid: Long = 0,
     @SerializedName("id")
     var hotelId           : Long = 0,
     @SerializedName("name")
