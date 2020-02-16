@@ -7,6 +7,7 @@
     <string name="distance">Расстояние:</string>
     <string name="free_rooms">Свободные комнаты:</string>
     <string name="hotel_fragment_title">Отели</string>
+    <string name="actioion_profile_edit">Профиль</string>
 
     <string-array name="sort_types">
         <item>Нет</item>
