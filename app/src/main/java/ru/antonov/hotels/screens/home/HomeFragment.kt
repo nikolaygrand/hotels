@@ -9,8 +9,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
+import com.faltenreich.skeletonlayout.Skeleton
+import com.faltenreich.skeletonlayout.applySkeleton
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.home_fragment.*
 import ru.antonov.hotels.R
@@ -23,7 +24,9 @@ class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
     private lateinit var hotelsAdapter: HotelsAdapter
     private var sortFieldPosition: SortFieldsEnum = SortFieldsEnum.NONE
     private var sortDirection: SortEnum = SortEnum.NONE
-    private var subjectSort: PublishSubject<SortModel> = PublishSubject.create<SortModel>()
+    private var subjectSort = PublishSubject.create<SortModel>()
+    private var subjectRefresh = PublishSubject.create<Unit>()
+    private lateinit var skeleton: Skeleton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +55,10 @@ class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.home_fragment, null, false)
+    ): View = inflater.inflate(R.layout.home_fragment, null, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        rlProgressbar.visibility = View.VISIBLE
 
         btnSortAsc.isEnabled = false
 
@@ -101,12 +102,16 @@ class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
 
         rvHotels.addItemDecoration(VerticalSpaceItemDecoration(20))
 
-        rvHotels.apply {
-            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        with(rvHotels) {
             adapter = hotelsAdapter
         }
 
+        srlHotels.setOnRefreshListener {
+            srlHotels.isRefreshing = false
+            subjectRefresh.onNext(Unit)
+        }
 
+        skeleton = rvHotels.applySkeleton(R.layout.hotel_item, 3)
     }
 
     private fun makeSortHotels() {
@@ -121,17 +126,16 @@ class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
 
     override fun loadHotels(hotels: ArrayList<HotelModel>) {
         if (hotels.isNullOrEmpty()) {
-            rlProgressbar.visibility = View.VISIBLE
+            skeleton.showSkeleton()
             return
         }
 
-        rlProgressbar.visibility = View.GONE
-        hotelsAdapter.setDataset(hotels)
+        skeleton.showOriginal()
         hotelsAdapter.notifyDataSetChanged()
     }
 
     override fun error(error: Throwable?) {
-        rlProgressbar.visibility = View.GONE
+        skeleton.showOriginal()
 
         val alertDialogBuilder = AlertDialog.Builder(context!!)
         when (error) {
@@ -155,6 +159,7 @@ class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
 
     override fun hotelClick() = hotelsAdapter.subjectItemClick
     override fun sortHotels() = subjectSort
+    override fun refresh(): Observable<Unit> = subjectRefresh
 
     companion object {
         val TAG = HomeFragment::class.java.simpleName

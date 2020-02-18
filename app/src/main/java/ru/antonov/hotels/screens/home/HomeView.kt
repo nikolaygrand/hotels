@@ -7,8 +7,7 @@ import ru.antonov.hotels.data.HotelModel
 interface HomeView: MvpView {
     fun loadHotels(hotels: ArrayList<HotelModel>)
     fun error(error: Throwable?)
-
     fun hotelClick(): Observable<HotelModel>
-
     fun sortHotels(): Observable<SortModel>
+    fun refresh(): Observable<Unit>
 }

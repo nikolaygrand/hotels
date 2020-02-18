@@ -16,6 +16,7 @@ abstract class BasePresenter<V : MvpView> : MvpPresenter<V> {
     }
 
     override fun detachView(retainInstance: Boolean) {
+        disposable.clear()
     }
 
     override fun attachView(view: V) {

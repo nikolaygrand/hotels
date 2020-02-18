@@ -2,14 +2,11 @@ package ru.antonov.hotels.activity
 
 import android.os.Bundle
 import android.util.Log
-import com.hannesdorfmann.mosby3.mvp.MvpPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import ru.antonov.hotels.application.HotelApplication
 import ru.antonov.hotels.mvp.BasePresenter
 import ru.antonov.hotels.navigator.Screens
-import ru.antonov.hotels.screens.home.HomeFragment
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
@@ -32,12 +29,17 @@ class MainPresenter : BasePresenter<MainView>() {
     }
 
     override fun detachView() {
-
+        disposable.clear()
     }
 
     fun onCreate(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             router.newRootScreen(Screens.AuthScreen())
         }
+    }
+
+    override fun destroy() {
+        disposable.dispose()
+        super.destroy()
     }
 }

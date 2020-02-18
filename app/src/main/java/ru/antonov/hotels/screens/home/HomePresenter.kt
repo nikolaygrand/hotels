@@ -26,19 +26,7 @@ class HomePresenter : BasePresenter<HomeView>() {
         HotelApplication.appComponent.inject(this)
         super.attachView(view)
 
-        disposable += repository.getHotelsList()
-            .doOnSubscribe {
-                arrayListOf<HotelModel>()
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { hotels: ArrayList<HotelModel> ->
-                    view.loadHotels(hotels)
-                },
-                { error: Throwable? ->
-                    view.error(error)
-                })
+        loadHotels(view)
 
         disposable += view.hotelClick()
             .observeOn(AndroidSchedulers.mainThread())
@@ -53,6 +41,9 @@ class HomePresenter : BasePresenter<HomeView>() {
             .subscribe { sortModel ->
                 view.loadHotels(sortHotels(sortModel))
             }
+
+        disposable += view.refresh()
+            .subscribe { loadHotels(view) }
     }
 
     override fun detachView(retainInstance: Boolean) {
@@ -63,7 +54,23 @@ class HomePresenter : BasePresenter<HomeView>() {
         disposable.clear()
     }
 
-    fun sortHotels(model: SortModel): ArrayList<HotelModel> {
+    private fun loadHotels(view: HomeView) {
+        disposable += repository.getHotelsList()
+            .doOnSubscribe {
+                arrayListOf<HotelModel>()
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { hotels: ArrayList<HotelModel> ->
+                    view.loadHotels(hotels)
+                },
+                { error: Throwable? ->
+                    view.error(error)
+                })
+    }
+
+    private fun sortHotels(model: SortModel): ArrayList<HotelModel> {
         val sortedArray = arrayListOf<HotelModel>()
 
         when (model.field) {

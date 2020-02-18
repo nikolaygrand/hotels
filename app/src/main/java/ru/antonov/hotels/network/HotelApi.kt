@@ -16,7 +16,7 @@ class HotelApi constructor(context: Context) {
     private val logInterceptor = HttpLoggingInterceptor()
 
     init {
-        logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        logInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
         val httpClient = OkHttpClient().newBuilder()
             .addInterceptor(logInterceptor)
