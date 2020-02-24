@@ -5,7 +5,6 @@ import ru.antonov.hotels.activity.MainActivity
 import ru.antonov.hotels.activity.MainPresenter
 import ru.antonov.hotels.application.HotelApplication
 import ru.antonov.hotels.navigator.Navigator
-import ru.antonov.hotels.screens.auth.AuthPresenter
 import ru.antonov.hotels.screens.home.HomePresenter
 import ru.antonov.hotels.screens.hotel.HotelPresenter
 import javax.inject.Singleton
@@ -20,5 +19,4 @@ interface AppComponent {
     fun inject(presenter: MainPresenter)
     fun inject(presenter: HomePresenter)
     fun inject(presenter: HotelPresenter)
-    fun inject(presenter: AuthPresenter)
 }

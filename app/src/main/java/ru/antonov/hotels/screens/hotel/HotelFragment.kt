@@ -12,7 +12,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
@@ -22,18 +21,20 @@ import kotlinx.android.synthetic.main.hotel_item.*
 import ru.antonov.hotels.BuildConfig
 import ru.antonov.hotels.R
 import ru.antonov.hotels.data.HotelDetailsModel
+import ru.antonov.hotels.mvp.BaseFragment
 
-class HotelFragment : MvpFragment<HotelView, HotelPresenter>(), HotelView {
+class HotelFragment : BaseFragment<HotelView, HotelPresenter>(), HotelView {
     private val subjectHotel = PublishSubject.create<Long>()
     private val subjectBack = PublishSubject.create<Unit>()
+    private var subjectRefresh = PublishSubject.create<Unit>()
     private var hotelId: Long = 0
 
     override fun createPresenter() = HotelPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hotelId = arguments!!.getLong(HOTEL_ID)
         retainInstance = true
+        hotelId = arguments!!.getLong(HOTEL_ID)
     }
 
     override fun onCreateView(
@@ -44,10 +45,18 @@ class HotelFragment : MvpFragment<HotelView, HotelPresenter>(), HotelView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rlProgressbar.visibility = View.GONE
-
         subjectHotel.onNext(hotelId)
         (toolbar as Toolbar).setNavigationOnClickListener { subjectBack.onNext(Unit) }
+
+        with(srlHotel) {
+            setOnRefreshListener {
+                isRefreshing = false
+                subjectHotel.onNext(hotelId)
+                skeletonLayout.showSkeleton()
+            }
+        }
+
+        skeletonLayout.showSkeleton()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -65,6 +74,7 @@ class HotelFragment : MvpFragment<HotelView, HotelPresenter>(), HotelView {
         tvDistanceValue.text = hotel.distance.toString()
         tvRoomsValue.text = hotel.parseSuitesAvailability()
 
+        skeletonLayout.showOriginal()
         /*
         initPointMap(hotel)
         mvHotelMap.visibility = View.VISIBLE
@@ -113,7 +123,7 @@ class HotelFragment : MvpFragment<HotelView, HotelPresenter>(), HotelView {
     }
 
     override fun error(error: Throwable?) {
-        rlProgressbar.visibility = View.GONE
+        skeletonLayout.showOriginal()
 
         val alertDialogBuilder = AlertDialog.Builder(context!!)
         when (error) {

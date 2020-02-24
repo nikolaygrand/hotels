@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.hotel_item.view.*
 import ru.antonov.hotels.R
 import ru.antonov.hotels.data.HotelModel
 
-class HotelsAdapter: RecyclerView.Adapter<HotelsViewHolder>() {
+class HotelsAdapter : RecyclerView.Adapter<HotelsViewHolder>() {
     private var dataset = ArrayList<HotelModel>()
     var subjectItemClick = PublishSubject.create<HotelModel>()
 
@@ -27,12 +27,12 @@ class HotelsAdapter: RecyclerView.Adapter<HotelsViewHolder>() {
 
         view.setOnClickListener { subjectItemClick.onNext(hotel) }
 
-        view.tvTitle.text         = hotel.name
-        view.tvAddress.text       = hotel.address
-        view.tvAddress.text       = hotel.address
-        view.rbHotel.rating       = hotel.stars!!
+        view.tvTitle.text = hotel.name
+        view.tvAddress.text = hotel.address
+        view.tvAddress.text = hotel.address
+        view.rbHotel.rating = hotel.stars!!
         view.tvDistanceValue.text = hotel.distance.toString()
-        view.tvRoomsValue.text    = hotel.parseSuitesAvailability()
+        view.tvRoomsValue.text = hotel.parseSuitesAvailability()
     }
 
     fun setDataset(data: ArrayList<HotelModel>) {

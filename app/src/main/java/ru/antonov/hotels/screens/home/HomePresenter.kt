@@ -18,10 +18,6 @@ class HomePresenter : BasePresenter<HomeView>() {
     @Inject
     lateinit var repository: HotelsRepository
 
-    override fun destroy() {
-        disposable.dispose()
-    }
-
     override fun attachView(view: HomeView) {
         HotelApplication.appComponent.inject(this)
         super.attachView(view)
@@ -46,12 +42,12 @@ class HomePresenter : BasePresenter<HomeView>() {
             .subscribe { loadHotels(view) }
     }
 
-    override fun detachView(retainInstance: Boolean) {
+    override fun detachView() {
         disposable.clear()
     }
 
-    override fun detachView() {
-        disposable.clear()
+    override fun destroy() {
+        disposable.dispose()
     }
 
     private fun loadHotels(view: HomeView) {
@@ -97,8 +93,6 @@ class HomePresenter : BasePresenter<HomeView>() {
             else -> {
             }
         }
-
         return sortedArray
-
     }
 }

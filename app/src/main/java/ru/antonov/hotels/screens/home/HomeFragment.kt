@@ -106,12 +106,15 @@ class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
             adapter = hotelsAdapter
         }
 
-        srlHotels.setOnRefreshListener {
-            srlHotels.isRefreshing = false
-            subjectRefresh.onNext(Unit)
+        with(srlHotels) {
+            setOnRefreshListener {
+                isRefreshing = false
+                subjectRefresh.onNext(Unit)
+            }
         }
 
         skeleton = rvHotels.applySkeleton(R.layout.hotel_item, 3)
+        skeleton.showSkeleton()
     }
 
     private fun makeSortHotels() {
@@ -125,13 +128,9 @@ class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
     }
 
     override fun loadHotels(hotels: ArrayList<HotelModel>) {
-        if (hotels.isNullOrEmpty()) {
-            skeleton.showSkeleton()
-            return
-        }
-
-        skeleton.showOriginal()
+        hotelsAdapter.setDataset(hotels)
         hotelsAdapter.notifyDataSetChanged()
+        skeleton.showOriginal()
     }
 
     override fun error(error: Throwable?) {
@@ -159,7 +158,7 @@ class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
 
     override fun hotelClick() = hotelsAdapter.subjectItemClick
     override fun sortHotels() = subjectSort
-    override fun refresh(): Observable<Unit> = subjectRefresh
+    override fun refresh(): Observable<Unit> = subjectRefresh.doOnNext { skeleton.showSkeleton() }
 
     companion object {
         val TAG = HomeFragment::class.java.simpleName

@@ -1,6 +1,8 @@
 package ru.antonov.hotels.activity
 
+import android.content.Intent
 import android.os.Bundle
+import com.google.firebase.auth.FirebaseUser
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.yandex.mapkit.MapKitFactory
 import io.reactivex.subjects.PublishSubject
@@ -13,9 +15,10 @@ import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
 
-class MainActivity: MvpActivity<MainView, MainPresenter>(), MainView {
+class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
 
     private val subjectBack = PublishSubject.create<Unit>()
+    private val authSubject = PublishSubject.create<FirebaseUser?>()
 
     @Inject
     lateinit var router: Router
@@ -33,7 +36,7 @@ class MainActivity: MvpActivity<MainView, MainPresenter>(), MainView {
         MapKitFactory.initialize(this)
 
         setContentView(R.layout.activity_main)
-        presenter.onCreate(savedInstanceState)
+        presenter.onCreate(savedInstanceState, this)
     }
 
     override fun onResume() {
@@ -49,6 +52,11 @@ class MainActivity: MvpActivity<MainView, MainPresenter>(), MainView {
     override fun onBackPressed() {
         super.onBackPressed()
         subjectBack.onNext(Unit)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        presenter.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun createPresenter() = MainPresenter()
