@@ -6,8 +6,9 @@ import io.reactivex.schedulers.Schedulers
 import ru.antonov.hotels.application.HotelApplication
 import ru.antonov.hotels.data.HotelDetailsModel
 import ru.antonov.hotels.mvp.BasePresenter
-import ru.antonov.hotels.repository.HotelsRepository
+import ru.antonov.hotels.repository.IHotelsRepository
 import ru.terrakok.cicerone.Router
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class HotelPresenter : BasePresenter<HotelView>() {
@@ -15,13 +16,14 @@ class HotelPresenter : BasePresenter<HotelView>() {
     lateinit var router: Router
 
     @Inject
-    lateinit var repository: HotelsRepository
+    lateinit var repository: IHotelsRepository
 
     override fun attachView(view: HotelView) {
         HotelApplication.appComponent.inject(this)
         super.attachView(view)
 
         disposable += view.getHotelInfo()
+            .debounce(200, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.io())
             .flatMap { id ->
                 repository.getHotelsDetail(id)
@@ -43,10 +45,12 @@ class HotelPresenter : BasePresenter<HotelView>() {
     }
 
     override fun detachView() {
+        super.detachView()
         disposable.clear()
     }
 
     override fun destroy() {
         disposable.dispose()
+        super.destroy()
     }
 }

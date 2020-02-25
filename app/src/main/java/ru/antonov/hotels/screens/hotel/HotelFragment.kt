@@ -26,7 +26,6 @@ import ru.antonov.hotels.mvp.BaseFragment
 class HotelFragment : BaseFragment<HotelView, HotelPresenter>(), HotelView {
     private val subjectHotel = PublishSubject.create<Long>()
     private val subjectBack = PublishSubject.create<Unit>()
-    private var subjectRefresh = PublishSubject.create<Unit>()
     private var hotelId: Long = 0
 
     override fun createPresenter() = HotelPresenter()
@@ -34,7 +33,6 @@ class HotelFragment : BaseFragment<HotelView, HotelPresenter>(), HotelView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-        hotelId = arguments!!.getLong(HOTEL_ID)
     }
 
     override fun onCreateView(
@@ -45,8 +43,9 @@ class HotelFragment : BaseFragment<HotelView, HotelPresenter>(), HotelView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        subjectHotel.onNext(hotelId)
         (toolbar as Toolbar).setNavigationOnClickListener { subjectBack.onNext(Unit) }
+
+        hotelId = arguments!!.getLong(HOTEL_ID)
 
         with(srlHotel) {
             setOnRefreshListener {
@@ -55,8 +54,8 @@ class HotelFragment : BaseFragment<HotelView, HotelPresenter>(), HotelView {
                 skeletonLayout.showSkeleton()
             }
         }
-
         skeletonLayout.showSkeleton()
+        subjectHotel.onNext(hotelId)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

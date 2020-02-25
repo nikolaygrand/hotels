@@ -1,6 +1,5 @@
 package ru.antonov.hotels.network
 
-import android.content.Context
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -9,7 +8,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.antonov.hotels.BuildConfig
 
-class HotelApi constructor(context: Context) {
+class HotelApi {
     private var mClient: IHotelApi
 
     private var interceptor = InterceptorApi()

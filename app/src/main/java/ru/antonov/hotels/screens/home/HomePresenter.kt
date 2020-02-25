@@ -7,7 +7,7 @@ import ru.antonov.hotels.application.HotelApplication
 import ru.antonov.hotels.data.HotelModel
 import ru.antonov.hotels.mvp.BasePresenter
 import ru.antonov.hotels.navigator.Screens
-import ru.antonov.hotels.repository.HotelsRepository
+import ru.antonov.hotels.repository.IHotelsRepository
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ class HomePresenter : BasePresenter<HomeView>() {
     lateinit var router: Router
 
     @Inject
-    lateinit var repository: HotelsRepository
+    lateinit var repository: IHotelsRepository
 
     override fun attachView(view: HomeView) {
         HotelApplication.appComponent.inject(this)
