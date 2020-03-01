@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="actioion_profile_edit">Профиль</string>
+    <string name="auth_manual_cancel">Отмена авторизации</string>
+    <string name="unexpected_error">Произошла ошибка, попробуйте позже</string>
+    <string name="auth_wellcome_with_name">Добро пожаловать в приложение, %1$s</string>
+    <string name="auth_wellcome_without_name">Добро пожаловать.</string>
 </resources>

@@ -8,6 +8,10 @@
     <string name="free_rooms">Свободные комнаты:</string>
     <string name="hotel_fragment_title">Отели</string>
     <string name="actioion_profile_edit">Профиль</string>
+    <string name="auth_manual_cancel">Отмена авторизации</string>
+    <string name="unexpected_error">Произошла ошибка, попробуйте позже</string>
+    <string name="auth_wellcome_with_name">Добро пожаловать в приложение, %1$s</string>
+    <string name="auth_wellcome_without_name">Добро пожаловать.</string>
 
     <string-array name="sort_types">
         <item>Нет</item>
