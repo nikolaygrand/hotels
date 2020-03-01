@@ -1,11 +1,8 @@
 package ru.antonov.hotels.screens.home
 
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AlertDialog
@@ -20,13 +17,14 @@ import ru.antonov.hotels.mvp.BaseFragment
 import ru.antonov.hotels.utils.view.VerticalSpaceItemDecoration
 
 
-class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
+class HomeFragment : BaseFragment<HomeView, HomePresenter>(R.layout.home_fragment), HomeView {
     private lateinit var hotelsAdapter: HotelsAdapter
     private var sortFieldPosition: SortFieldsEnum = SortFieldsEnum.NONE
     private var sortDirection: SortEnum = SortEnum.NONE
     private var subjectSort = PublishSubject.create<SortModel>()
     private var subjectRefresh = PublishSubject.create<Unit>()
     private lateinit var skeleton: Skeleton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +47,6 @@ class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
 
         hotelsAdapter = HotelsAdapter()
     }
-
-    @SuppressLint("InflateParams")
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.home_fragment, null, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -160,11 +151,11 @@ class HomeFragment : BaseFragment<HomeView, HomePresenter>(), HomeView {
     override fun sortHotels() = subjectSort
     override fun refresh(): Observable<Unit> = subjectRefresh.doOnNext { skeleton.showSkeleton() }
 
+    override fun createPresenter(): HomePresenter = HomePresenter()
+
     companion object {
         val TAG = HomeFragment::class.java.simpleName
         const val SORT_FIELD = "SORT_FIELD"
         const val SORT_DIRECTION = "SORT_DIRECTION"
     }
-
-    override fun createPresenter() = HomePresenter()
 }

@@ -16,6 +16,7 @@ android {
         buildConfigField "String", "API_URL", API_BASE_URL
         buildConfigField "String", "IMAGE_URL", API_IMAGE_URL
         buildConfigField "String", "YANDEX_API_KEY", YANDEX_API_KEY
+        buildConfigField "String", "DEFAULT_COOKIES_KEY", "\"HOTELS_COOKIES\""
 
         vectorDrawables.useSupportLibrary = true
 

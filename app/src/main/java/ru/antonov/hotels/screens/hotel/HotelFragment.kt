@@ -2,9 +2,7 @@ package ru.antonov.hotels.screens.hotel
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
@@ -23,23 +21,15 @@ import ru.antonov.hotels.R
 import ru.antonov.hotels.data.HotelDetailsModel
 import ru.antonov.hotels.mvp.BaseFragment
 
-class HotelFragment : BaseFragment<HotelView, HotelPresenter>(), HotelView {
+class HotelFragment : BaseFragment<HotelView, HotelPresenter>(R.layout.home_hotel), HotelView {
     private val subjectHotel = PublishSubject.create<Long>()
     private val subjectBack = PublishSubject.create<Unit>()
     private var hotelId: Long = 0
-
-    override fun createPresenter() = HotelPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.home_hotel, null, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -147,6 +137,7 @@ class HotelFragment : BaseFragment<HotelView, HotelPresenter>(), HotelView {
     override fun back() = subjectBack
     override fun getHotelInfo() = subjectHotel
 
+    override fun createPresenter(): HotelPresenter = HotelPresenter()
 
     companion object {
         const val HOTEL_ID = "HOTEL_ID"

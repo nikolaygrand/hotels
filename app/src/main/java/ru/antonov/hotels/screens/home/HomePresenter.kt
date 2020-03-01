@@ -5,18 +5,20 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import ru.antonov.hotels.application.HotelApplication
 import ru.antonov.hotels.data.HotelModel
+import ru.antonov.hotels.interactors.IHomeInteractor
 import ru.antonov.hotels.mvp.BasePresenter
 import ru.antonov.hotels.navigator.Screens
-import ru.antonov.hotels.repository.IHotelsRepository
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
-class HomePresenter : BasePresenter<HomeView>() {
+class HomePresenter() :
+    BasePresenter<HomeView>() {
+
     @Inject
     lateinit var router: Router
 
     @Inject
-    lateinit var repository: IHotelsRepository
+    lateinit var interactor: IHomeInteractor
 
     override fun attachView(view: HomeView) {
         HotelApplication.appComponent.inject(this)
@@ -51,7 +53,7 @@ class HomePresenter : BasePresenter<HomeView>() {
     }
 
     private fun loadHotels(view: HomeView) {
-        disposable += repository.getHotelsList()
+        disposable += interactor.getHotelsList()
             .doOnSubscribe {
                 arrayListOf<HotelModel>()
             }

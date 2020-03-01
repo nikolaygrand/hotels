@@ -5,7 +5,8 @@ import dagger.Module
 import dagger.Provides
 import io.reactivex.annotations.NonNull
 import ru.antonov.hotels.cache.Cache
-import ru.antonov.hotels.network.HotelApi
+import ru.antonov.hotels.cookies.Cookies
+import ru.antonov.hotels.cookies.ICookies
 import javax.inject.Singleton
 
 @Module
@@ -14,4 +15,9 @@ class CacheModule {
     @NonNull
     @Provides
     fun cache(context: Context) = Cache(context)
+
+    @Singleton
+    @NonNull
+    @Provides
+    fun cookies(context: Context): ICookies = Cookies(context)
 }
